@@ -1,8 +1,9 @@
 const AppError = require('../utils/appError');
 
-// Handlling invalid database ID
+// Handlling invalid database ID or parse data errror
 exports.handleCastErrorDB = err => {
-  const message = `Invalid ${err.path}: ${err.value}.`;
+  // const message = `Invalid ${err.path}: ${err.stringValue}.`;
+  const message = `Invalid ${err.path}: ${err.stringValue}.`;
   return new AppError(message, 400);
 };
 
@@ -22,3 +23,9 @@ exports.handleValidationErrorDB = err => {
   const message = `Invalid input data. ${errors.join('. ')}`;
   return new AppError(message, 400);
 };
+
+exports.handleJWTError = () =>
+  new AppError('Invalid token. Please log in again!', 401);
+
+exports.handleJWTExpiredError = () =>
+  new AppError('Your token has expired! Please log in again.', 401);
