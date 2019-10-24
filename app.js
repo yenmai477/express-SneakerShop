@@ -54,6 +54,7 @@ app.use(xss());
 app.use(compression());
 
 // 2) ROUTES
+app.get('/', (req, res) => res.json({ msg: 'Hello world' }));
 app.use('/api/v1/users', userRouter);
 app.use('/api/v1/products', productRouter);
 
