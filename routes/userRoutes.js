@@ -2,6 +2,7 @@ const express = require('express');
 const authController = require('./../controllers/authController');
 const userController = require('../controllers/userController');
 const cartController = require('../controllers/cartController');
+const wishlistController = require('../controllers/wishListController');
 
 const router = express.Router();
 
@@ -16,9 +17,19 @@ router.use(authController.protect);
 router.patch('/updateMyPassword', authController.updatePassword);
 router.patch('/updateMe', userController.updateMe);
 router.get('/me', userController.getMe, userController.getUser);
-router.post('/addToCart', cartController.createCartItem);
-router.delete('/removeFromCart/:id', cartController.deleteCartItem);
-router.get('/cart', userController.getMe, cartController.getAllCartItem);
+router
+  .route('/cart')
+  .get(userController.getMe, cartController.getAllCartItem)
+  .post(cartController.createCartItem);
+
+router.delete('/cart/:id', cartController.deleteCartItem);
+
+router
+  .route('/wishlist')
+  .get(userController.getMe, wishlistController.getAllWishlistItem)
+  .post(wishlistController.createWishlistItem);
+
+router.delete('/wishlist/:id', wishlistController.deleteWishlistItem);
 
 router.use(authController.restrictTo('admin'));
 

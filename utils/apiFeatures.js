@@ -16,16 +16,16 @@ class APIFeatures {
       /\b(gte|gt|lte|lt|in)\b/g,
       match => `$${match}`
     );
-    const inData = queryStr.match(/(?<=\[).+?(?=\])/g)[0];
 
-    queryStr = JSON.parse(queryStr);
-    Object.keys(queryStr).forEach(key => {
-      if (queryStr[key].$in) {
-        queryStr[key].$in = inData.split(',');
+    const query = JSON.parse(queryStr);
+    Object.keys(query).forEach(key => {
+      if (query[key].$in) {
+        const inData = queryStr.match(/(?<=\[).+?(?=\])/g)[0];
+        query[key].$in = inData.split(',');
       }
     });
 
-    this.query = this.query.find(queryStr);
+    this.query = this.query.find(query);
 
     return this;
   }
