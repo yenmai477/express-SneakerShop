@@ -1,5 +1,4 @@
 const express = require('express');
-const productController = require('../controllers/productController');
 const authController = require('../controllers/authController');
 const productVariantController = require('../controllers/productVariantController');
 
@@ -7,30 +6,25 @@ const router = express.Router();
 
 router
   .route('/')
-  .get(productController.getAllProducts)
+  .get(productVariantController.getAllProductVariant)
   .post(
     authController.protect,
     authController.restrictTo('admin'),
-    productController.createProduct
+    productVariantController.createProductVariant
   );
 
 router
   .route('/:id')
-  .get(productController.getProduct)
+  .get(productVariantController.getProductVariant)
   .patch(
     authController.protect,
     authController.restrictTo('admin'),
-    productController.updateProduct
+    productVariantController.updateProductVariant
   )
   .delete(
     authController.protect,
     authController.restrictTo('admin'),
-    productController.deleteProduct
+    productVariantController.deleteProductVariant
   );
-
-router
-  .route('/:productId/variants')
-  .get(productVariantController.getAllProductVariant)
-  .post(productVariantController.createProductVariant);
 
 module.exports = router;

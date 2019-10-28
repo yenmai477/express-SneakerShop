@@ -50,6 +50,7 @@ exports.createOne = Model =>
 exports.getOne = (Model, popOptions) =>
   catchAsync(async (req, res, next) => {
     let query = Model.findById(req.params.id);
+
     if (popOptions) query = query.populate(popOptions);
     const doc = await query;
 
@@ -67,9 +68,13 @@ exports.getOne = (Model, popOptions) =>
 
 exports.getAll = Model =>
   catchAsync(async (req, res, next) => {
-    // To allow for nested GET attributes on product (hack)
+    // To allow for nested GET
     let filter = {};
+    //Check for product (producrVariant)
     if (req.params.productId) filter = { product: req.params.productId };
+
+    //Check for user (cart)
+    if (req.params.userId) filter = { user: req.params.userId };
 
     const features = new APIFeatures(Model.find(filter), req.query)
       .filter()

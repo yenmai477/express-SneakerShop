@@ -2,10 +2,8 @@ const mongoose = require('mongoose');
 
 const productVariantSchema = mongoose.Schema({
   product: {
-    type: {
-      type: mongoose.Schema.ObjectId,
-      ref: 'Product',
-    },
+    type: mongoose.Schema.ObjectId,
+    ref: 'Product',
   },
   size: {
     type: Number,
@@ -18,6 +16,17 @@ const productVariantSchema = mongoose.Schema({
     min: [0, 'Quantity must be quantity must be greater than or equal to 0'],
   },
 });
+
+productVariantSchema.pre(/^find/, function(next) {
+  this.populate({
+    path: 'product',
+    select: 'name price',
+  });
+  next();
+});
+
+// TODO: 10/25/19 Create index to prevent duplicate variants
+productVariantSchema.index({ product: 1, color: 1, size: 1 }, { unique: true });
 
 const productVariant = mongoose.model('ProductVariant', productVariantSchema);
 
