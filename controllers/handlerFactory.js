@@ -34,6 +34,10 @@ exports.updateOne = Model =>
 
 exports.createOne = Model =>
   catchAsync(async (req, res, next) => {
+    //trick for  Cart and Wishlist
+    if (req.params.id) req.body.user = req.params.id;
+    console.log(req.params.userId, req.body);
+
     const doc = await Model.create(req.body);
 
     res.status(201).json({
@@ -71,7 +75,7 @@ exports.getAll = Model =>
     if (req.params.productId) filter = { product: req.params.productId };
 
     //Check for user (cart)
-    if (req.params.userId) filter = { user: req.params.userId };
+    if (req.params.id) filter = { user: req.params.id };
 
     const features = new APIFeatures(Model.find(filter), req.query)
       .filter()

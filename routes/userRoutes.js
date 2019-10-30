@@ -20,14 +20,14 @@ router.get('/me', userController.getMe, userController.getUser);
 router
   .route('/cart')
   .get(userController.getMe, cartController.getAllCartItem)
-  .post(cartController.createCartItem);
+  .post(userController.getMe, cartController.createCartItem);
 
 router.delete('/cart/:id', cartController.deleteCartItem);
 
 router
   .route('/wishlist')
   .get(userController.getMe, wishlistController.getAllWishlistItem)
-  .post(wishlistController.createWishlistItem);
+  .post(userController.getMe, wishlistController.createWishlistItem);
 
 router.delete('/wishlist/:id', wishlistController.deleteWishlistItem);
 
