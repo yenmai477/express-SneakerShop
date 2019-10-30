@@ -20,7 +20,7 @@ const productVariantSchema = mongoose.Schema({
 productVariantSchema.pre(/^find/, function(next) {
   this.populate({
     path: 'product',
-    select: 'name price',
+    select: 'name price imageCover',
   });
   next();
 });
