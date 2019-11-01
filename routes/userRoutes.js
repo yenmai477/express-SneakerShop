@@ -24,8 +24,8 @@ router
 
 router
   .route('/cart/:id')
-  .delete(cartController.deleteCartItem)
-  .patch(cartController.updateCartItem);
+  .patch(cartController.updateCartItem)
+  .delete(cartController.deleteCartItem);
 
 router
   .route('/wishlist')
