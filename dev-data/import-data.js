@@ -44,6 +44,7 @@ const importData = async () => {
 const deleteData = async () => {
   try {
     await User.deleteMany();
+    await Product.deleteMany();
     console.log('Data successfully deleted!');
   } catch (err) {
     console.log(err);
