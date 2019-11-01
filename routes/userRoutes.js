@@ -22,7 +22,10 @@ router
   .get(userController.getMe, cartController.getAllCartItem)
   .post(userController.getMe, cartController.createCartItem);
 
-router.delete('/cart/:id', cartController.deleteCartItem);
+router
+  .route('/cart/:id')
+  .delete(cartController.deleteCartItem)
+  .patch(cartController.updateCartItem);
 
 router
   .route('/wishlist')

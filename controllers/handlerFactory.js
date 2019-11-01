@@ -36,7 +36,6 @@ exports.createOne = Model =>
   catchAsync(async (req, res, next) => {
     //trick for  Cart and Wishlist
     if (req.params.id) req.body.user = req.params.id;
-    console.log(req.params.userId, req.body);
 
     const doc = await Model.create(req.body);
 

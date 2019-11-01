@@ -20,7 +20,7 @@ const productSchema = mongoose.Schema(
     },
     price: {
       type: Number,
-      required: [true, 'A tour must have a price'],
+      required: [true, 'A product must have a price'],
     },
     priceDiscount: {
       type: Number,
@@ -32,18 +32,18 @@ const productSchema = mongoose.Schema(
         message: 'Discount price ({VALUE}) should be below regular price',
       },
     },
-    summary: {
-      type: String,
-      trim: true,
-      required: [true, 'A tour must have a description'],
-    },
+    // summary: {
+    //   type: String,
+    //   trim: true,
+    //   required: [true, 'A product must have a description'],
+    // },
     description: {
       type: String,
       trim: true,
     },
     imageCover: {
       type: String,
-      required: [true, 'A tour must have a cover image'],
+      required: [true, 'A product must have a cover image'],
     },
     images: [String],
     brand: {
