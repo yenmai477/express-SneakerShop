@@ -5,15 +5,15 @@ const wishListItemSchema = mongoose.Schema({
     type: mongoose.Schema.ObjectId,
     ref: 'User',
   },
-  variant: {
+  product: {
     type: mongoose.Schema.ObjectId,
-    ref: 'ProductVariant',
+    ref: 'Product',
   },
 });
 
 wishListItemSchema.pre(/^find/, function(next) {
   this.populate({
-    path: 'variant',
+    path: 'product',
     // select: 'name price',
   });
   next();
