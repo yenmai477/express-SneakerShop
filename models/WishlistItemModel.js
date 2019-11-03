@@ -19,7 +19,7 @@ wishListItemSchema.pre(/^find/, function(next) {
   next();
 });
 
-wishListItemSchema.index({ variant: 1, user: 1 }, { unique: true });
+wishListItemSchema.index({ product: 1, user: 1 }, { unique: true });
 
 const WishListItem = mongoose.model('WishListItem', wishListItemSchema);
 
