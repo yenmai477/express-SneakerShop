@@ -34,12 +34,15 @@ exports.updateOne = Model =>
     });
   });
 
-exports.createOne = Model =>
+exports.createOne = (Model, popOptions) =>
   catchAsync(async (req, res, next) => {
     //trick for  Cart and Wishlist
     if (req.params.id) req.body.user = req.params.id;
+    let doc = await Model.create(req.body);
 
-    const doc = await Model.create(req.body);
+    if (popOptions) {
+      doc = await Model.findById(doc._id).populate(popOptions);
+    }
 
     res.status(201).json({
       status: 'success',
