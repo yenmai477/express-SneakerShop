@@ -12,6 +12,7 @@ const cartItemSchema = mongoose.Schema({
   quantity: {
     type: Number,
     min: 1,
+    default: 1,
   },
 });
 
