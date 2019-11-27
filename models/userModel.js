@@ -51,9 +51,6 @@ const userSchema = mongoose.Schema({
     enum: ['user', 'admin'],
     default: 'user',
   },
-
-  // TODO: 09/30/19 Favlist declare
-  // TODO: 09/30/19 cart declare
   passwordChangedAt: Date,
   passwordResetToken: String,
   passwordResetExpires: Date,

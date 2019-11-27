@@ -2,6 +2,7 @@ const express = require('express');
 const productController = require('../controllers/productController');
 const authController = require('../controllers/authController');
 const productVariantController = require('../controllers/productVariantController');
+const reviewRouter = require('../routes/reviewRoutes');
 
 const router = express.Router();
 
@@ -27,6 +28,8 @@ router
     authController.restrictTo('admin'),
     productController.deleteProduct
   );
+
+router.use('/:productId/reviews', reviewRouter);
 
 router
   .route('/:productId/variants')

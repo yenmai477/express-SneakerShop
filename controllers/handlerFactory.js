@@ -78,8 +78,10 @@ exports.getAll = Model =>
     //Check for product (producrVariant)
     if (req.params.productId) filter = { product: req.params.productId };
 
-    //Check for user (cart)
+    //Check for user (cart or order)
     if (req.params.id) filter = { user: req.params.id };
+
+    console.log(filter);
 
     const features = new APIFeatures(Model.find(filter), req.query)
       .filter()

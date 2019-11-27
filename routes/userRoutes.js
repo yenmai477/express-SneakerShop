@@ -3,6 +3,7 @@ const authController = require('./../controllers/authController');
 const userController = require('../controllers/userController');
 const cartController = require('../controllers/cartController');
 const wishlistController = require('../controllers/wishListController');
+const orderController = require('../controllers/orderController');
 
 const router = express.Router();
 
@@ -33,6 +34,11 @@ router
   .post(userController.getMe, wishlistController.createWishlistItem);
 
 router.delete('/wishlist/:id', wishlistController.deleteWishlistItem);
+
+router
+  .route('/order')
+  .get(userController.getMe, orderController.getAllOrder)
+  .post(userController.getMe, orderController.createOrder);
 
 router.use(authController.restrictTo('admin'));
 

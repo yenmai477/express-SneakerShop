@@ -13,6 +13,8 @@ const globalErrorHandler = require('./controllers/errorController');
 const userRouter = require('./routes/userRoutes');
 const productRouter = require('./routes/productRoutes');
 const productVariantRouter = require('./routes/variantProductRoutes');
+const orderRouter = require('./routes/orderRoutes');
+const reviewRouter = require('./routes/reviewRoutes');
 
 dotenv.config('.env');
 
@@ -68,6 +70,8 @@ app.get('/', (req, res) => res.json({ msg: 'Hello world' }));
 app.use('/api/v1/users', userRouter);
 app.use('/api/v1/products', productRouter);
 app.use('/api/v1/variants', productVariantRouter);
+app.use('/api/v1/orders', orderRouter);
+app.use('/api/v1/reviews', reviewRouter);
 
 //Check Unhandled Routes
 app.all('*', (req, res, next) => {
