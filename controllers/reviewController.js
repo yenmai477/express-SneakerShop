@@ -1,3 +1,4 @@
+const mongoose = require('mongoose');
 const Review = require('./../models/reviewModel');
 const factory = require('./handlerFactory');
 const catchAsync = require('./../utils/catchAsync');
@@ -12,7 +13,10 @@ exports.setProductUserIds = (req, res, next) => {
 
 exports.getAllReviews = factory.getAll(Review);
 exports.getReview = factory.getOne(Review);
-exports.createReview = factory.createOne(Review);
+exports.createReview = factory.createOne(Review, {
+  path: 'user',
+  select: 'name photo',
+});
 exports.updateReview = factory.updateOne(Review);
 exports.deleteReview = factory.deleteOne(Review);
 
@@ -27,4 +31,16 @@ exports.checkUserDelete = catchAsync(async (req, res, next) => {
   }
 
   next();
+});
+exports.analysisReview = catchAsync(async (req, res, next) => {
+  const productId = mongoose.Types.ObjectId(req.params.productId);
+  const doc = await Review.analysisReview(productId);
+
+  res.status(200).json({
+    status: 'success',
+    length: doc.length,
+    data: {
+      data: doc,
+    },
+  });
 });

@@ -1,5 +1,7 @@
 const mongoose = require('mongoose');
 const CartItem = require('../models/CartItemModel');
+const ProductVariant = require('../models/productVariantModel');
+const AppError = require('../utils/appError');
 
 const orderSchema = new mongoose.Schema({
   name: {
@@ -61,8 +63,41 @@ orderSchema.statics.clearCartItem = async function(userId) {
   await CartItem.deleteMany({ user: userId });
 };
 
-orderSchema.post('save', function() {
+orderSchema.statics.updateQuantityProduct = async function(
+  variantId,
+  orderQuantity
+) {
+  const variant = await ProductVariant.findById(variantId);
+  variant.quantity -= orderQuantity;
+  await variant.save();
+};
+
+orderSchema.post('save', function(doc) {
   this.constructor.clearCartItem(this.user);
+  doc.variants.forEach(item => {
+    this.constructor.updateQuantityProduct(item.variant, item.quantity);
+  });
+});
+
+orderSchema.pre('save', async function(next) {
+  const map = {};
+  this.variants.forEach(item => {
+    map[item.variant] = item.quantity;
+  });
+  const variantIds = Object.keys(map);
+  const variants = await ProductVariant.find({ _id: { $in: variantIds } });
+
+  variants.forEach(item => {
+    if (map[item._id.toString()] > item.quantity) {
+      const error = new AppError(
+        `${item.product.name}(Size ${item.size} - ${item.color}) only have ${item.quantity} products in stock`,
+        400
+      );
+      next(error);
+    }
+  });
+
+  next();
 });
 
 const Order = mongoose.model('Order', orderSchema);

@@ -15,6 +15,8 @@ router
     reviewController.createReview
   );
 
+router.get('/analysisReview/:productId', reviewController.analysisReview);
+
 router
   .route('/:id')
   .get(reviewController.getReview)

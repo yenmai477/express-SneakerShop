@@ -2,6 +2,7 @@
 const mongoose = require('mongoose');
 const Product = require('./productModel');
 const Order = require('./orderModel');
+const ProductVariant = require('./productVariantModel');
 
 const reviewSchema = new mongoose.Schema(
   {
@@ -27,6 +28,10 @@ const reviewSchema = new mongoose.Schema(
       type: mongoose.Schema.ObjectId,
       ref: 'User',
       required: [true, 'Review must belong to a user'],
+    },
+    bought: {
+      type: Boolean,
+      default: false,
     },
   },
   {
@@ -80,6 +85,48 @@ reviewSchema.statics.calcAverageRatings = async function(productId) {
     });
   }
 };
+
+reviewSchema.statics.analysisReview = async function(productId) {
+  const stats = await this.aggregate([
+    {
+      $match: { product: productId },
+    },
+    {
+      $group: {
+        _id: '$rating',
+        nRating: { $sum: 1 },
+      },
+    },
+  ]);
+  // console.log(productId);
+
+  const totalRating = stats.reduce((pre, curr) => {
+    return pre + curr.nRating;
+  }, 0);
+
+  stats.forEach(item => {
+    item.percentage = Math.round((item.nRating / totalRating) * 10) / 10;
+  });
+  // console.log(stats);
+  return stats;
+};
+
+reviewSchema.pre('save', async function(next) {
+  let variants = await ProductVariant.find({
+    product: this.product,
+  }).select('-product id');
+  variants = variants.map(item => item._id.toString());
+  const orders = await Order.find({
+    user: this.user,
+    'variants.variant': { $in: variants },
+  });
+
+  if (orders.length > 0) {
+    this.bought = true;
+  }
+
+  next();
+});
 
 reviewSchema.post('save', function() {
   // this points to current review
