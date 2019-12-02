@@ -100,15 +100,28 @@ reviewSchema.statics.analysisReview = async function(productId) {
   ]);
   // console.log(productId);
 
+  const result = {};
+  for (let index = 5; index > 0; index -= 1) {
+    result[index] = { nRating: 0, percentage: 0 };
+  }
+
   const totalRating = stats.reduce((pre, curr) => {
     return pre + curr.nRating;
   }, 0);
 
+  if (totalRating === 0) {
+    return result;
+  }
+
   stats.forEach(item => {
-    item.percentage = Math.round((item.nRating / totalRating) * 10) / 10;
+    result[item._id] = {
+      nRating: item.nRating,
+      percentage: Math.round((item.nRating / totalRating) * 10) / 10,
+    };
   });
   // console.log(stats);
-  return stats;
+
+  return result;
 };
 
 reviewSchema.pre('save', async function(next) {
