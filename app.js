@@ -15,6 +15,7 @@ const productRouter = require('./routes/productRoutes');
 const productVariantRouter = require('./routes/variantProductRoutes');
 const orderRouter = require('./routes/orderRoutes');
 const reviewRouter = require('./routes/reviewRoutes');
+const viewRouter = require('./routes/viewRoutes');
 
 dotenv.config('.env');
 
@@ -66,7 +67,7 @@ app.use(xss());
 app.use(compression());
 
 // 2) ROUTES
-app.get('/', (req, res) => res.json({ msg: 'Hello world' }));
+app.use('/', viewRouter);
 app.use('/api/v1/users', userRouter);
 app.use('/api/v1/products', productRouter);
 app.use('/api/v1/variants', productVariantRouter);
