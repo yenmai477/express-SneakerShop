@@ -124,9 +124,7 @@ exports.forgotPassword = catchAsync(async (req, res, next) => {
   await user.save({ validateBeforeSave: false });
 
   // 3) Send it to user's email
-  const resetURL = `${req.protocol}://${req.get(
-    'host'
-  )}/users/resetPassword/${resetToken}`;
+  const resetURL = `intent:#Intent;scheme=qssneaker://users/resetPassword/${resetToken};package=com.yenmaiteam.qssneaker;end`;
 
   try {
     // await sendEmail({
