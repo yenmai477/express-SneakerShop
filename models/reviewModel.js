@@ -113,13 +113,20 @@ reviewSchema.statics.analysisReview = async function(productId) {
     return result;
   }
 
-  stats.forEach(item => {
+  let lastPercentage = 1;
+
+  stats.forEach((item, index) => {
     result[item._id] = {
       nRating: item.nRating,
-      percentage: Math.round((item.nRating / totalRating) * 10) / 10,
     };
+    if (index < stats.length - 1) {
+      result[item._id].percentage =
+        Math.round((item.nRating / totalRating) * 100) / 100;
+      lastPercentage -= result[item._id].percentage;
+    } else {
+      result[item._id].percentage = Math.round(lastPercentage * 100) / 100;
+    }
   });
-  // console.log(stats);
 
   return result;
 };
